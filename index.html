@@ -7,13 +7,15 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <body>
-        <script>
+        
+    </body>
+    <script>
           window.fbAsyncInit = function() {
             FB.init({
-              appId      : '{336380863508689}',
+              appId      : '336380863508689',
               cookie     : true,
               xfbml      : true,
-              version    : '{2.11}'
+              version    : 'v2.11'
             });
 
             FB.AppEvents.logPageView();   
@@ -26,6 +28,5 @@
              js.src = "https://connect.facebook.net/en_US/sdk.js";
              fjs.parentNode.insertBefore(js, fjs);
            }(document, 'script', 'facebook-jssdk'));
-        </script>
-    </body>
+    </script>
 </html>
