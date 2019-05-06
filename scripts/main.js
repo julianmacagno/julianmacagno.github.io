@@ -21,14 +21,35 @@ for (let i = 0; i < dirtyKillsArray.length; i++) {
 
 var killsArrayNames = {};
 for (let i = 0; i < killsArray.length; i++) {
-    killsArrayNames[killsArray[i][1]] = true; //replace killsArray to dirtyKillsArray to see auto-elimations. Invest if a array [['julianmacagno'],['julianmacagno']] is a elim
+    killsArrayNames[killsArray[i][1]] = true; //replace killsArray to dirtyKillsArray to see auto-elimations. Research if a array [['julianmacagno'],['julianmacagno']] is a elim
     killsArrayNames[killsArray[i][2]] = true;
 }
 var playersName = Object.keys(killsArrayNames);
 
 var nodes = playersName.map(function(name) {
-    return {id: name, label: position[name] + " - " + name, position: position[name]};
+    return {id: name, label: position[name] + " - " + name, position: position[name], level: 7};
 });
+
+for (let i = 0; i < nodes.length; i++) {
+    if(nodes[i].id == 'Only Kid Player')
+        nodes[i].level = 1;
+}
+
+for (let level = 1; level < 7; level++) {
+    for (let i = 0; i < nodes.length; i++) {
+        if(nodes[i].level == level) { //busca los de ese nivel por vez
+            for (let j = 0; j < killsArray.length; j++) { 
+                if(nodes[i].id == killsArray[j][1]) {  //busca la kills de los de ese nivel
+                    for (let k = 0; k < nodes.length; k++) { //con la kill, busca en node los que hayan sido matados por el de arriba
+                        if(nodes[k].id == killsArray[j][2]) {
+                            nodes[k].level = level+1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 var edges = killsArray.map(function(killEvent) {
     return {from: killEvent[1], to: killEvent[2]}; //kill[1] is killer, kill[2] is killed
@@ -54,7 +75,7 @@ var options = {
         randomSeed: undefined,
         improvedLayout:true,
         hierarchical: {
-          enabled:false,
+          enabled:true,
           levelSeparation: 150,
           nodeSpacing: 100,
           treeSpacing: 200,
