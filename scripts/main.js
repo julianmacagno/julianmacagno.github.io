@@ -27,38 +27,8 @@ for (let i = 0; i < killsArray.length; i++) {
 var playersName = Object.keys(killsArrayNames);
 
 var nodes = playersName.map(function(name) {
-    return {id: name, label: position[name] + " - " + name, position: position[name], level: 8, leveled: false};
+    return {id: name, label: position[name] + " - " + name};
 });
-
-//cambiar las condiciones de los for para que terminen cuando no haya mas datos o niveles que procesar, no con numeros fijos
-for (let g = killsArray.length-1, level = 1; g >= 0; g--) { //recorre la lista de kills buscando los killers que nunca fueron asignados
-    var lastKillerNodeIndex = nodes.findIndex(elem => { //obtiene el indice del nodo de ese killer
-        return elem.id == killsArray[g][1]; 
-    });
-
-    if(nodes[lastKillerNodeIndex].leveled == false) {
-        console.log(nodes[lastKillerNodeIndex]);
-        nodes[lastKillerNodeIndex].level = 1;
-
-        for (let level = 1; level < 8; level++) { //para cada uno de los niveles posibles
-            for (let i = 0; i < nodes.length; i++) { //recorre los nodos buscando
-                if(nodes[i].level == level) { //si tiene ese nivel en particular
-                    for (let j = 0; j < killsArray.length; j++) { //si tiene, 
-                        if(nodes[i].id == killsArray[j][1]) {  //busca la kills del seleccionado en ese momento
-                            for (let k = 0; k < nodes.length; k++) { //para cada kill
-                                //busca en nodes los que hayan sido matados por el de arriba
-                                if(nodes[k].id == killsArray[j][2]) { 
-                                    nodes[k].level = level+1; //y les asigna un nivel
-                                }
-                            }
-                        }
-                    }
-                    nodes[i].leveled = true; //se indica sus hijos ya fueron leveleados (no necesita volver a chequear, sus hijos se chequearan en la proxima vuelta al tener un nivel mayor)
-                }
-            }
-        }
-    }
-}    
 
 var edges = killsArray.map(function(killEvent) {
     return {from: killEvent[1], to: killEvent[2]}; //kill[1] is killer, kill[2] is killed
